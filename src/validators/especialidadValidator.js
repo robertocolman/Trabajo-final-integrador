@@ -1,15 +1,14 @@
 const { check, param, validationResult } = require('express-validator');
+const { errorResponse } = require('../utils/responseHandler');
 
-// Función central para manejar los errores y responder con el status 400
 const validarResultados = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errores: errors.array() });
+        return errorResponse(res, errors.array(), 400);
     }
     next();
 };
 
-// Validaciones para POST (para Crear) y PUT (para Editar)
 const validarEspecialidad = [
     check('nombre')
         .exists().withMessage('El campo nombre es obligatorio')
@@ -19,7 +18,6 @@ const validarEspecialidad = [
     validarResultados
 ];
 
-// Validaciones para el ID en la URL (GET por id, PUT, DELETE)
 const validarIdEspecialidad = [
     param('id')
         .exists().withMessage('El ID es obligatorio')
@@ -27,7 +25,4 @@ const validarIdEspecialidad = [
     validarResultados
 ];
 
-module.exports = {
-    validarEspecialidad,
-    validarIdEspecialidad
-};
+module.exports = { validarEspecialidad, validarIdEspecialidad };
