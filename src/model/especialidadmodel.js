@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+import pool from '../config/db.js';
 
 const especialidadModel = {
     
@@ -23,4 +23,4 @@ const especialidadModel = {
     }
 };
 
-module.exports = especialidadModel;
+export default especialidadModel;

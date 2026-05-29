@@ -1,13 +1,16 @@
-require('dotenv').config();
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const { errorResponse } = require('./src/utils/responseHandler');
-const especialidadRoutes = require('./src/routes/especialidadRoutes');
+import 'dotenv/config.js';
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import { errorResponse } from './src/utils/responseHandler.js';
+import especialidadRoutes from './src/routes/especialidadRoutes.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -23,6 +26,15 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en: http://localhost:${PORT}/api/v1/especialidades`);
+    console.log(`
+    ========================================
+    ✓ Servidor iniciado correctamente
+    ✓ Puerto: ${PORT}
+    ✓ Entorno: ${NODE_ENV}
+    ✓ URL: http://localhost:${PORT}/api/v1
+    ========================================
+    `);
 });
