@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { errorResponse } from './src/utils/responseHandler.js';
 import especialidadRoutes from './src/routes/especialidadRoutes.js';
+import { morganOptions } from './src/config/logger.js';
 
 const app = express();
 
@@ -12,7 +13,13 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
-app.use(morgan('dev'));
+
+const NODE_ENV = process.env.NODE_ENV || 'development';
+if (NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+} else {
+    app.use(morgan('combined', morganOptions));
+}
 
 app.use('/api/v1/especialidades', especialidadRoutes);
 
@@ -26,7 +33,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
 
 app.listen(PORT, () => {
     console.log(`
