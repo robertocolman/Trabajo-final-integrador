@@ -4,7 +4,10 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { errorResponse } from './src/utils/responseHandler.js';
 import especialidadRoutes from './src/routes/especialidadRoutes.js';
-import { morganOptions } from './src/config/logger.js';
+import { morganOptions, morganFormat } from './src/config/logger.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './src/config/swagger.js';
+import requestLogger from './src/middleware/requestLogger.js';
 
 const app = express();
 
@@ -18,10 +21,16 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 if (NODE_ENV === 'development') {
     app.use(morgan('dev'));
 } else {
-    app.use(morgan('combined', morganOptions));
+    app.use(morgan(morganFormat, morganOptions));
 }
 
+// Registrar bodies cortos de POST/PUT para debugging local
+app.use(requestLogger);
+
 app.use('/api/v1/especialidades', especialidadRoutes);
+
+// Documentación Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res) => {
     errorResponse(res, 'Ruta no encontrada', 404);

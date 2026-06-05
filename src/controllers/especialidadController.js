@@ -27,6 +27,7 @@ export const createEspecialidad = async (req, res, next) => {
     try {
         const { nombre } = req.body;
         const [result] = await pool.query('INSERT INTO especialidades (nombre) VALUES (?)', [nombre]);
+        console.log('Especialidad creada:', nombre);
         successResponse(res, { id: result.insertId, nombre }, 201);
     } catch (error) {
         next(error);

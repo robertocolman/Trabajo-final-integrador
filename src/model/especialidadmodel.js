@@ -1,5 +1,6 @@
 import pool from '../config/db.js';
 
+// TODO: agregar métodos de lectura (getAll, getById) - Roberto
 const especialidadModel = {
     
     create: async (nombre) => {
