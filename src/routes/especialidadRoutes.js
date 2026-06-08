@@ -16,16 +16,6 @@ const router = express.Router();
 	*           application/json:
 	*             schema:
 	*               $ref: '#/components/schemas/ApiResponseEspecialidad'
-	*             example:
-	*               error: false
-	*               status: 200
-	*               body:
-	*                 - id_especialidad: 1
-	*                   nombre: 'CARDIOLOGÍA'
-	*                   activo: 1
-	*                 - id_especialidad: 2
-	*                   nombre: 'TRAUMATOLOGÍA'
-	*                   activo: 1
 	*/
 router.get('/', especialidadController.getAllEspecialidades);
 
