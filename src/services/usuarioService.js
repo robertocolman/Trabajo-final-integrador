@@ -11,7 +11,7 @@ const usuarioService = {
 
     create: async (data) => {
         const id = await usuarioModel.create(data);
-        return { id, nombre: data.nombre.toUpperCase(), username: data.username, role: data.role || 'user' };
+        return { id, ...data };
     },
 
     update: async (id, data) => {

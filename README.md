@@ -11,11 +11,6 @@ npm install
 cp .env.example .env   # completar variables de entorno
 ```
 
-- Variables importantes (`.env`):
-  - `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
-  - `PORT` (por defecto 3000)
-  - `CORS_ORIGIN`
-
 
 - Logging:
   - Se usa `morgan` para registrar solicitudes.
@@ -25,9 +20,10 @@ cp .env.example .env   # completar variables de entorno
   - Disponible en `http://localhost:3000/api-docs` cuando el servidor corre.
 
 - Soft Delete (implementación):
-  - Las tablas usan columna `activo` para marcar registros activos.
-  - Las consultas de lectura deben filtrar `WHERE activo = 1`.
-  - El borrado lógico es un `UPDATE` que setea `activo = 0`.
+  - Se aplica borrado lógico sin eliminar físicamente registros.
+  - En `especialidades`, `obras_sociales` y `usuarios`: `UPDATE ... SET activo = 0`.
+  - En `medicos` y `pacientes` (según el esquema oficial): la desactivación se refleja en `usuarios.activo = 0` del usuario relacionado.
+  - Las consultas de lectura filtran por estado activo según la relación correspondiente.
 
 - Ejecutar servidor:
 

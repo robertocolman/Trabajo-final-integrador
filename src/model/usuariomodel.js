@@ -2,7 +2,7 @@ import pool from '../config/db.js';
 
 const usuarioModel = {
     getAll: async () => {
-        const query = 'SELECT id_usuario, nombre, username, role, activo FROM usuarios WHERE activo = 1';
+        const query = 'SELECT id_usuario, documento, apellido, nombres, email, foto_path, rol, activo FROM usuarios WHERE activo = 1';
         try {
             const [rows] = await pool.query(query);
             return rows;
@@ -12,7 +12,7 @@ const usuarioModel = {
     },
 
     getById: async (id) => {
-        const query = 'SELECT id_usuario, nombre, username, role, activo FROM usuarios WHERE id_usuario = ? AND activo = 1';
+        const query = 'SELECT id_usuario, documento, apellido, nombres, email, foto_path, rol, activo FROM usuarios WHERE id_usuario = ? AND activo = 1';
         try {
             const [rows] = await pool.query(query, [id]);
             return rows[0] || null;
@@ -21,20 +21,24 @@ const usuarioModel = {
         }
     },
 
-    create: async ({ nombre, username, password, role }) => {
-        const query = `INSERT INTO usuarios (nombre, username, password, role, activo) VALUES (?, ?, ?, ?, 1)`;
+    create: async ({ documento, apellido, nombres, email, contrasenia, foto_path, rol }) => {
+        const query = `INSERT INTO usuarios (documento, apellido, nombres, email, contrasenia, foto_path, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)`;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), username, password, role || 'user']);
+            const [result] = await pool.query(query, [documento, apellido, nombres, email, contrasenia, foto_path || '', rol || 2]);
             return result.insertId;
         } catch (error) {
             throw error;
         }
     },
 
-    update: async (id, { nombre, username, password, role }) => {
-        const query = `UPDATE usuarios SET nombre = ?, username = ?, password = ?, role = ? WHERE id_usuario = ? AND activo = 1`;
+    update: async (id, { documento, apellido, nombres, email, contrasenia, foto_path, rol }) => {
+        const query = `
+            UPDATE usuarios
+            SET documento = ?, apellido = ?, nombres = ?, email = ?, contrasenia = ?, foto_path = ?, rol = ?
+            WHERE id_usuario = ? AND activo = 1
+        `;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), username, password, role || 'user', id]);
+            const [result] = await pool.query(query, [documento, apellido, nombres, email, contrasenia, foto_path || '', rol || 2, id]);
             return result.affectedRows;
         } catch (error) {
             throw error;

@@ -11,7 +11,7 @@ const obraSocialService = {
 
     create: async (data) => {
         const id = await obraSocialModel.create(data);
-        return { id, nombre: data.nombre.toUpperCase(), telefono: data.telefono || null };
+        return { id, ...data };
     },
 
     update: async (id, data) => {

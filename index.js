@@ -23,16 +23,16 @@ app.use(express.json());
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 if (NODE_ENV === 'development') {
-    // Mostrar logs en consola para desarrollo
+    
     app.use(morgan('dev'));
-    // Además registrar en archivo para auditoría y revisiones
+    
     app.use(morgan(morganFormat, morganOptions));
 } else {
-    // En producción solo archivo (formato personalizado)
+    
     app.use(morgan(morganFormat, morganOptions));
 }
 
-// Registrar bodies cortos de POST/PUT para depuración local
+
 app.use(requestLogger);
 
 app.use('/api/v1/especialidades', especialidadRoutes);
@@ -42,7 +42,24 @@ app.use('/api/v1/usuarios', usuarioRoutes);
 app.use('/api/v1/obras_sociales', obraSocialRoutes);
 
 // Documentación Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        swaggerOptions: {
+            defaultModelRendering: 'model'
+        },
+        customCss: `
+            .swagger-ui .model-example,
+            .swagger-ui .response-col_description .renderedMarkdown,
+            .swagger-ui .examples-select,
+            .swagger-ui .opblock-section-request-body .tab li:first-child,
+            .swagger-ui .responses-inner .tab li:first-child {
+                display: none !important;
+            }
+        `
+    })
+);
 
 app.use((req, res) => {
     errorResponse(res, 'Ruta no encontrada', 404);

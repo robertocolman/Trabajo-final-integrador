@@ -11,7 +11,7 @@ const pacienteService = {
 
     create: async (data) => {
         const id = await pacienteModel.create(data);
-        return { id, ...data, nombre: data.nombre.toUpperCase(), apellido: data.apellido.toUpperCase() };
+        return { id, ...data };
     },
 
     update: async (id, data) => {

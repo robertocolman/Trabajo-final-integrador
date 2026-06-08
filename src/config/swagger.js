@@ -12,37 +12,288 @@ const swaggerDefinition = {
       url: `http://localhost:${process.env.PORT || 3000}/api/v1`,
       description: 'Servidor local'
     }
-  ]
-  ,
+  ],
+  tags: [
+    { name: 'Especialidades', description: 'Gestión de especialidades médicas' },
+    { name: 'Medicos', description: 'Gestión de médicos' },
+    { name: 'Pacientes', description: 'Gestión de pacientes' },
+    { name: 'Usuarios', description: 'Gestión de usuarios del sistema' },
+    { name: 'ObrasSociales', description: 'Gestión de obras sociales' }
+  ],
   components: {
     schemas: {
       Especialidad: {
         type: 'object',
         properties: {
+          id_especialidad: { type: 'integer', example: 1 },
           nombre: { type: 'string' },
-          activo: { type: 'integer' }
+          activo: { type: 'integer', example: 1 }
         }
       },
-      ErrorResponse: {
+      EspecialidadInput: {
         type: 'object',
+        required: ['nombre'],
         properties: {
-          error: { type: 'boolean' },
-          status: { type: 'integer' },
-          message: { type: 'string' }
+          nombre: { type: 'string', maxLength: 120, example: 'Cardiologia' }
         }
       },
-      ApiResponseEspecialidad: {
+      Medico: {
         type: 'object',
         properties: {
-          error: { type: 'boolean' },
-          status: { type: 'integer' },
+          id_medico: { type: 'integer', example: 1 },
+          id_usuario: { type: 'integer', example: 3 },
+          id_especialidad: { type: 'integer', example: 3 },
+          matricula: { type: 'integer', example: 3000 },
+          descripcion: { type: 'string', nullable: true, example: 'test' },
+          valor_consulta: { type: 'number', format: 'float', example: 10000.00 },
+          apellido: { type: 'string', example: 'Benitez' },
+          nombres: { type: 'string', example: 'Horacio' },
+          email: { type: 'string', example: 'benhor@correo.com' },
+          especialidad: { type: 'string', example: 'TRAUMATOLOGIA' }
+        }
+      },
+      MedicoInput: {
+        type: 'object',
+        required: ['id_usuario', 'id_especialidad', 'matricula', 'valor_consulta'],
+        properties: {
+          id_usuario: { type: 'integer', example: 3 },
+          id_especialidad: { type: 'integer', example: 3 },
+          matricula: { type: 'integer', example: 3000 },
+          descripcion: { type: 'string', nullable: true, example: 'test' },
+          valor_consulta: { type: 'number', format: 'float', example: 10000.00 }
+        }
+      },
+      Paciente: {
+        type: 'object',
+        properties: {
+          id_paciente: { type: 'integer', example: 1 },
+          id_usuario: { type: 'integer', example: 5 },
+          id_obra_social: { type: 'integer', example: 1 },
+          apellido: { type: 'string', example: 'Lopez' },
+          nombres: { type: 'string', example: 'Jacinto' },
+          email: { type: 'string', example: 'lopjac@correo.com' },
+          obra_social: { type: 'string', example: 'Jerarquicos' }
+        }
+      },
+      PacienteInput: {
+        type: 'object',
+        required: ['id_usuario', 'id_obra_social'],
+        properties: {
+          id_usuario: { type: 'integer', example: 5 },
+          id_obra_social: { type: 'integer', example: 1 }
+        }
+      },
+      Usuario: {
+        type: 'object',
+        properties: {
+          id_usuario: { type: 'integer', example: 1 },
+          documento: { type: 'string', example: '31000111' },
+          apellido: { type: 'string', example: 'Lopez' },
+          nombres: { type: 'string', example: 'Marcelo' },
+          email: { type: 'string', example: 'lopmar@correo.com' },
+          foto_path: { type: 'string', example: '' },
+          rol: { type: 'integer', example: 1 },
+          activo: { type: 'integer', example: 1 }
+        }
+      },
+      UsuarioInput: {
+        type: 'object',
+        required: ['documento', 'apellido', 'nombres', 'email', 'contrasenia'],
+        properties: {
+          documento: { type: 'string', maxLength: 20, example: '31000111' },
+          apellido: { type: 'string', maxLength: 100, example: 'Lopez' },
+          nombres: { type: 'string', maxLength: 100, example: 'Marcelo' },
+          email: { type: 'string', maxLength: 255, example: 'lopmar@correo.com' },
+          contrasenia: { type: 'string', minLength: 6, maxLength: 255, example: 'claveSegura123' },
+          foto_path: { type: 'string', nullable: true, example: '' },
+          rol: { type: 'integer', nullable: true, example: 2 }
+        }
+      },
+      ObraSocial: {
+        type: 'object',
+        properties: {
+          id_obra_social: { type: 'integer', example: 1 },
+          nombre: { type: 'string', example: 'Jerarquicos' },
+          descripcion: { type: 'string', example: 'jer' },
+          porcentaje_descuento: { type: 'number', format: 'float', example: 10.00 },
+          es_particular: { type: 'integer', example: 0 },
+          activo: { type: 'integer', example: 1 }
+        }
+      },
+      ObraSocialInput: {
+        type: 'object',
+        required: ['nombre', 'descripcion', 'porcentaje_descuento'],
+        properties: {
+          nombre: { type: 'string', maxLength: 120, example: 'Jerarquicos' },
+          descripcion: { type: 'string', maxLength: 255, example: 'jer' },
+          porcentaje_descuento: { type: 'number', format: 'float', example: 10.00 },
+          es_particular: { type: 'integer', minimum: 0, maximum: 1, nullable: true, example: 0 }
+        }
+      },
+      ValidationErrorItem: {
+        type: 'object',
+        properties: {
+          type: { type: 'string', example: 'field' },
+          value: { nullable: true },
+          msg: { type: 'string', example: 'El campo nombre es obligatorio' },
+          path: { type: 'string', example: 'nombre' },
+          location: { type: 'string', example: 'body' }
+        }
+      },
+      SuccessResponseListEspecialidad: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
           body: {
             type: 'array',
             items: { $ref: '#/components/schemas/Especialidad' }
           }
         }
+      },
+      SuccessResponseListMedico: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Medico' }
+          }
+        }
+      },
+      SuccessResponseListPaciente: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Paciente' }
+          }
+        }
+      },
+      SuccessResponseListUsuario: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Usuario' }
+          }
+        }
+      },
+      SuccessResponseListObraSocial: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/ObraSocial' }
+          }
+        }
+      },
+      SuccessResponseItemEspecialidad: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: { $ref: '#/components/schemas/Especialidad' }
+        }
+      },
+      SuccessResponseItemMedico: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: { $ref: '#/components/schemas/Medico' }
+        }
+      },
+      SuccessResponseItemPaciente: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: { $ref: '#/components/schemas/Paciente' }
+        }
+      },
+      SuccessResponseItemUsuario: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: { $ref: '#/components/schemas/Usuario' }
+        }
+      },
+      SuccessResponseItemObraSocial: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: { $ref: '#/components/schemas/ObraSocial' }
+        }
+      },
+      SuccessResponseMessage: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: false },
+          status: { type: 'integer', example: 200 },
+          body: {
+            type: 'object',
+            properties: {
+              message: { type: 'string', example: 'Registro eliminado correctamente' }
+            }
+          }
+        }
+      },
+      ErrorResponse: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: true },
+          status: { type: 'integer', example: 404 },
+          body: { type: 'string', example: 'Recurso no encontrado' }
+        }
+      },
+      ValidationErrorResponse: {
+        type: 'object',
+        properties: {
+          error: { type: 'boolean', example: true },
+          status: { type: 'integer', example: 400 },
+          body: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/ValidationErrorItem' }
+          }
+        }
       }
     },
+    responses: {
+      ValidationError: {
+        description: 'Error de validación en los datos enviados',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ValidationErrorResponse' }
+          }
+        }
+      },
+      NotFound: {
+        description: 'Recurso no encontrado',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      },
+      InternalError: {
+        description: 'Error interno del servidor',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      }
+    }
   }
 };
 

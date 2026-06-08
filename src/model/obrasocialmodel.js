@@ -21,20 +21,27 @@ const obraSocialModel = {
         }
     },
 
-    create: async ({ nombre, telefono }) => {
-        const query = `INSERT INTO obras_sociales (nombre, telefono, activo) VALUES (?, ?, 1)`;
+    create: async ({ nombre, descripcion, porcentaje_descuento, es_particular }) => {
+        const query = `
+            INSERT INTO obras_sociales (nombre, descripcion, porcentaje_descuento, es_particular, activo)
+            VALUES (?, ?, ?, ?, 1)
+        `;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), telefono || null]);
+            const [result] = await pool.query(query, [nombre.toUpperCase(), descripcion, porcentaje_descuento, es_particular || 0]);
             return result.insertId;
         } catch (error) {
             throw error;
         }
     },
 
-    update: async (id, { nombre, telefono }) => {
-        const query = `UPDATE obras_sociales SET nombre = ?, telefono = ? WHERE id_obra_social = ? AND activo = 1`;
+    update: async (id, { nombre, descripcion, porcentaje_descuento, es_particular }) => {
+        const query = `
+            UPDATE obras_sociales
+            SET nombre = ?, descripcion = ?, porcentaje_descuento = ?, es_particular = ?
+            WHERE id_obra_social = ? AND activo = 1
+        `;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), telefono || null, id]);
+            const [result] = await pool.query(query, [nombre.toUpperCase(), descripcion, porcentaje_descuento, es_particular || 0, id]);
             return result.affectedRows;
         } catch (error) {
             throw error;

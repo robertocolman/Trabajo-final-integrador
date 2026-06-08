@@ -11,7 +11,7 @@ const medicoService = {
 
     create: async (data) => {
         const id = await medicoModel.create(data);
-        return { id, ...data, nombre: data.nombre.toUpperCase(), apellido: data.apellido.toUpperCase() };
+        return { id, ...data };
     },
 
     update: async (id, data) => {

@@ -10,19 +10,30 @@ const validarResultados = (req, res, next) => {
 };
 
 const validarUsuario = [
-    check('nombre')
-        .exists().withMessage('El nombre es obligatorio')
-        .isString().withMessage('El nombre debe ser texto')
-        .isLength({ max: 120 }).withMessage('El nombre excede 120 caracteres'),
-    check('username')
-        .exists().withMessage('El username es obligatorio')
-        .isString().withMessage('El username debe ser texto')
-        .isLength({ max: 80 }).withMessage('El username excede 80 caracteres'),
-    check('password')
+    check('documento')
+        .exists().withMessage('El documento es obligatorio')
+        .isString().withMessage('El documento debe ser texto')
+        .isLength({ max: 20 }).withMessage('El documento excede 20 caracteres'),
+    check('apellido')
+        .exists().withMessage('El apellido es obligatorio')
+        .isString().withMessage('El apellido debe ser texto')
+        .isLength({ max: 100 }).withMessage('El apellido excede 100 caracteres'),
+    check('nombres')
+        .exists().withMessage('Los nombres son obligatorios')
+        .isString().withMessage('Los nombres deben ser texto')
+        .isLength({ max: 100 }).withMessage('Los nombres exceden 100 caracteres'),
+    check('email')
+        .exists().withMessage('El email es obligatorio')
+        .isEmail().withMessage('El email no es válido')
+        .isLength({ max: 255 }).withMessage('El email excede 255 caracteres'),
+    check('contrasenia')
         .exists().withMessage('La contraseña es obligatoria')
-        .isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
-    check('role')
-        .optional().isString().withMessage('El role debe ser texto'),
+        .isString().withMessage('La contraseña debe ser texto')
+        .isLength({ min: 6, max: 255 }).withMessage('La contraseña debe tener entre 6 y 255 caracteres'),
+    check('foto_path')
+        .optional().isString().withMessage('La foto debe ser texto'),
+    check('rol')
+        .optional().isInt({ gt: 0 }).withMessage('El rol debe ser entero positivo'),
     validarResultados
 ];
 

@@ -2,7 +2,20 @@ import pool from '../config/db.js';
 
 const pacienteModel = {
     getAll: async () => {
-        const query = 'SELECT * FROM pacientes WHERE activo = 1';
+        const query = `
+            SELECT
+                p.id_paciente,
+                p.id_usuario,
+                p.id_obra_social,
+                u.apellido,
+                u.nombres,
+                u.email,
+                os.nombre AS obra_social
+            FROM pacientes p
+            INNER JOIN usuarios u ON u.id_usuario = p.id_usuario
+            INNER JOIN obras_sociales os ON os.id_obra_social = p.id_obra_social
+            WHERE u.activo = 1 AND os.activo = 1
+        `;
         try {
             const [rows] = await pool.query(query);
             return rows;
@@ -12,7 +25,20 @@ const pacienteModel = {
     },
 
     getById: async (id) => {
-        const query = 'SELECT * FROM pacientes WHERE id_paciente = ? AND activo = 1';
+        const query = `
+            SELECT
+                p.id_paciente,
+                p.id_usuario,
+                p.id_obra_social,
+                u.apellido,
+                u.nombres,
+                u.email,
+                os.nombre AS obra_social
+            FROM pacientes p
+            INNER JOIN usuarios u ON u.id_usuario = p.id_usuario
+            INNER JOIN obras_sociales os ON os.id_obra_social = p.id_obra_social
+            WHERE p.id_paciente = ? AND u.activo = 1 AND os.activo = 1
+        `;
         try {
             const [rows] = await pool.query(query, [id]);
             return rows[0] || null;
@@ -21,20 +47,20 @@ const pacienteModel = {
         }
     },
 
-    create: async ({ nombre, apellido, dni, fecha_nacimiento, obra_social_id }) => {
-        const query = `INSERT INTO pacientes (nombre, apellido, dni, fecha_nacimiento, obra_social_id, activo) VALUES (?, ?, ?, ?, ?, 1)`;
+    create: async ({ id_usuario, id_obra_social }) => {
+        const query = `INSERT INTO pacientes (id_usuario, id_obra_social) VALUES (?, ?)`;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), apellido.toUpperCase(), dni || null, fecha_nacimiento || null, obra_social_id || null]);
+            const [result] = await pool.query(query, [id_usuario, id_obra_social]);
             return result.insertId;
         } catch (error) {
             throw error;
         }
     },
 
-    update: async (id, { nombre, apellido, dni, fecha_nacimiento, obra_social_id }) => {
-        const query = `UPDATE pacientes SET nombre = ?, apellido = ?, dni = ?, fecha_nacimiento = ?, obra_social_id = ? WHERE id_paciente = ? AND activo = 1`;
+    update: async (id, { id_usuario, id_obra_social }) => {
+        const query = `UPDATE pacientes SET id_usuario = ?, id_obra_social = ? WHERE id_paciente = ?`;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), apellido.toUpperCase(), dni || null, fecha_nacimiento || null, obra_social_id || null, id]);
+            const [result] = await pool.query(query, [id_usuario, id_obra_social, id]);
             return result.affectedRows;
         } catch (error) {
             throw error;
@@ -42,7 +68,12 @@ const pacienteModel = {
     },
 
     softDelete: async (id) => {
-        const query = 'UPDATE pacientes SET activo = 0 WHERE id_paciente = ? AND activo = 1';
+        const query = `
+            UPDATE usuarios u
+            INNER JOIN pacientes p ON p.id_usuario = u.id_usuario
+            SET u.activo = 0
+            WHERE p.id_paciente = ? AND u.activo = 1
+        `;
         try {
             const [result] = await pool.query(query, [id]);
             return result.affectedRows;

@@ -37,7 +37,7 @@ export const updateObra = async (req, res, next) => {
         const data = req.body;
         const affected = await obraSocialService.update(id, data);
         if (affected === 0) return errorResponse(res, 'Obra social no encontrada o inactiva', 404);
-        successResponse(res, { id, nombre: data.nombre.toUpperCase(), telefono: data.telefono || null });
+        successResponse(res, { id: Number(id), ...data });
     } catch (error) {
         next(error);
     }

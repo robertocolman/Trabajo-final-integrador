@@ -37,7 +37,7 @@ export const updateUsuario = async (req, res, next) => {
         const data = req.body;
         const affected = await usuarioService.update(id, data);
         if (affected === 0) return errorResponse(res, 'Usuario no encontrado o inactivo', 404);
-        successResponse(res, { id, nombre: data.nombre.toUpperCase(), username: data.username, role: data.role || 'user' });
+        successResponse(res, { id: Number(id), ...data });
     } catch (error) {
         next(error);
     }

@@ -9,6 +9,15 @@ const router = express.Router();
  *   get:
  *     tags: [Usuarios]
  *     summary: Listar usuarios activos
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios activos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseListUsuario'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.get('/', usuarioController.getAllUsuarios);
 
@@ -17,6 +26,25 @@ router.get('/', usuarioController.getAllUsuarios);
  *   get:
  *     tags: [Usuarios]
  *     summary: Obtener usuario por ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseItemUsuario'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.get('/:id', validarIdUsuario, usuarioController.getUsuarioById);
 
@@ -25,6 +53,23 @@ router.get('/:id', validarIdUsuario, usuarioController.getUsuarioById);
  *   post:
  *     tags: [Usuarios]
  *     summary: Crear usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UsuarioInput'
+ *     responses:
+ *       201:
+ *         description: Usuario creado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseItemUsuario'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.post('/', validarUsuario, usuarioController.createUsuario);
 
@@ -33,6 +78,31 @@ router.post('/', validarUsuario, usuarioController.createUsuario);
  *   put:
  *     tags: [Usuarios]
  *     summary: Actualizar usuario
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UsuarioInput'
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseItemUsuario'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.put('/:id', validarIdUsuario, validarUsuario, usuarioController.updateUsuario);
 
@@ -41,6 +111,25 @@ router.put('/:id', validarIdUsuario, validarUsuario, usuarioController.updateUsu
  *   delete:
  *     tags: [Usuarios]
  *     summary: Eliminar (soft delete)
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseMessage'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.delete('/:id', validarIdUsuario, usuarioController.deleteUsuario);
 

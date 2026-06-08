@@ -12,7 +12,6 @@ const accessLogStream = fs.createWriteStream(
     { flags: 'a' }
 );
 
-// Formato simple y claro para los logs
 const morganFormat = '[:date[iso]] :remote-addr :method :url :status :res[content-length] - :response-time ms';
 
 const morganOptions = {

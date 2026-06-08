@@ -36,8 +36,8 @@ export const updatePaciente = async (req, res, next) => {
         const { id } = req.params;
         const data = req.body;
         const affected = await pacienteService.update(id, data);
-        if (affected === 0) return errorResponse(res, 'Paciente no encontrado o inactivo', 404);
-        successResponse(res, { id, ...data, nombre: data.nombre.toUpperCase(), apellido: data.apellido.toUpperCase() });
+        if (affected === 0) return errorResponse(res, 'Paciente no encontrado', 404);
+        successResponse(res, { id: Number(id), ...data });
     } catch (error) {
         next(error);
     }
@@ -47,8 +47,8 @@ export const deletePaciente = async (req, res, next) => {
     try {
         const { id } = req.params;
         const affected = await pacienteService.remove(id);
-        if (affected === 0) return errorResponse(res, 'Paciente no encontrado o ya inactivo', 404);
-        successResponse(res, { message: 'Paciente eliminado correctamente' });
+        if (affected === 0) return errorResponse(res, 'Paciente no encontrado o ya desactivado', 404);
+        successResponse(res, { message: 'Paciente desactivado correctamente (soft delete por usuario)' });
     } catch (error) {
         next(error);
     }

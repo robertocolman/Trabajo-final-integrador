@@ -13,11 +13,17 @@ const validarObra = [
     check('nombre')
         .exists().withMessage('El nombre es obligatorio')
         .isString().withMessage('El nombre debe ser texto')
-        .isLength({ max: 150 }).withMessage('El nombre excede 150 caracteres'),
-    check('telefono')
+        .isLength({ max: 120 }).withMessage('El nombre excede 120 caracteres'),
+    check('descripcion')
+        .exists().withMessage('La descripción es obligatoria')
+        .isString().withMessage('La descripción debe ser texto')
+        .isLength({ max: 255 }).withMessage('La descripción excede 255 caracteres'),
+    check('porcentaje_descuento')
+        .exists().withMessage('El porcentaje de descuento es obligatorio')
+        .isFloat({ min: 0, max: 100 }).withMessage('El porcentaje de descuento debe estar entre 0 y 100'),
+    check('es_particular')
         .optional()
-        .isString().withMessage('El teléfono debe ser texto')
-        .isLength({ max: 40 }).withMessage('El teléfono excede 40 caracteres'),
+        .isInt({ min: 0, max: 1 }).withMessage('es_particular debe ser 0 o 1'),
     validarResultados
 ];
 
