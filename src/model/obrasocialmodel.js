@@ -1,8 +1,8 @@
 import pool from '../config/db.js';
-const especialidadModel = {
-    
+
+const obraSocialModel = {
     getAll: async () => {
-        const query = 'SELECT * FROM especialidades WHERE activo = 1';
+        const query = 'SELECT * FROM obras_sociales WHERE activo = 1';
         try {
             const [rows] = await pool.query(query);
             return rows;
@@ -12,7 +12,7 @@ const especialidadModel = {
     },
 
     getById: async (id) => {
-        const query = 'SELECT * FROM especialidades WHERE id_especialidad = ? AND activo = 1';
+        const query = 'SELECT * FROM obras_sociales WHERE id_obra_social = ? AND activo = 1';
         try {
             const [rows] = await pool.query(query, [id]);
             return rows[0] || null;
@@ -21,28 +21,28 @@ const especialidadModel = {
         }
     },
 
-    create: async (nombre) => {
-        const query = 'INSERT INTO especialidades (nombre, activo) VALUES (?, 1)';
+    create: async ({ nombre, telefono }) => {
+        const query = `INSERT INTO obras_sociales (nombre, telefono, activo) VALUES (?, ?, 1)`;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase()]);
+            const [result] = await pool.query(query, [nombre.toUpperCase(), telefono || null]);
             return result.insertId;
         } catch (error) {
             throw error;
         }
     },
 
-    update: async (id, nombre) => {
-        const query = 'UPDATE especialidades SET nombre = ? WHERE id_especialidad = ? AND activo = 1';
+    update: async (id, { nombre, telefono }) => {
+        const query = `UPDATE obras_sociales SET nombre = ?, telefono = ? WHERE id_obra_social = ? AND activo = 1`;
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase(), id]);
+            const [result] = await pool.query(query, [nombre.toUpperCase(), telefono || null, id]);
             return result.affectedRows;
         } catch (error) {
             throw error;
         }
-    }
-    ,
+    },
+
     softDelete: async (id) => {
-        const query = 'UPDATE especialidades SET activo = 0 WHERE id_especialidad = ? AND activo = 1';
+        const query = 'UPDATE obras_sociales SET activo = 0 WHERE id_obra_social = ? AND activo = 1';
         try {
             const [result] = await pool.query(query, [id]);
             return result.affectedRows;
@@ -52,4 +52,4 @@ const especialidadModel = {
     }
 };
 
-export default especialidadModel;
+export default obraSocialModel;

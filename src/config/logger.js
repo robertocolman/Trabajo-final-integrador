@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-// Creado por Leandro - ajuste de nombres para estilo estudiantil
 const dirLogs = path.resolve('logs');
 
 if (!fs.existsSync(dirLogs)) {

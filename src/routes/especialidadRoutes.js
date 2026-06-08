@@ -9,6 +9,23 @@ const router = express.Router();
 	*   get:
 	*     tags: [Especialidades]
 	*     summary: Listar especialidades activas
+	*     responses:
+	*       200:
+	*         description: Lista de especialidades
+	*         content:
+	*           application/json:
+	*             schema:
+	*               $ref: '#/components/schemas/ApiResponseEspecialidad'
+	*             example:
+	*               error: false
+	*               status: 200
+	*               body:
+	*                 - id_especialidad: 1
+	*                   nombre: 'CARDIOLOGÍA'
+	*                   activo: 1
+	*                 - id_especialidad: 2
+	*                   nombre: 'TRAUMATOLOGÍA'
+	*                   activo: 1
 	*/
 router.get('/', especialidadController.getAllEspecialidades);
 
