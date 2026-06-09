@@ -78,6 +78,9 @@ router.get('/:id', validarIdMedico, medicoController.getMedicoById);
  *     requestBody:
  *       required: true
  *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/MedicoInput'
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/MedicoInput'

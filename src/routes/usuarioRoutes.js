@@ -56,6 +56,9 @@ router.get('/:id', validarIdUsuario, usuarioController.getUsuarioById);
  *     requestBody:
  *       required: true
  *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/UsuarioInput'
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/UsuarioInput'

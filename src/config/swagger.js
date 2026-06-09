@@ -34,13 +34,26 @@ const swaggerDefinition = {
         type: 'object',
         required: ['nombre'],
         properties: {
-          nombre: { type: 'string', maxLength: 120, example: 'Cardiologia' }
+          nombre: {
+            type: 'string',
+            maxLength: 120,
+            description: 'Nombre de la especialidad medica',
+            example: 'Cardiologia'
+          }
+        },
+        example: {
+          nombre: 'Cardiologia'
         }
       },
       Medico: {
         type: 'object',
         properties: {
-          id_medico: { type: 'integer', example: 1 },
+          id_medico: {
+            type: 'integer',
+            readOnly: true,
+            description: 'Identificador autogenerado por la base de datos',
+            example: 1
+          },
           id_usuario: { type: 'integer', example: 3 },
           id_especialidad: { type: 'integer', example: 3 },
           matricula: { type: 'integer', example: 3000 },
@@ -54,13 +67,48 @@ const swaggerDefinition = {
       },
       MedicoInput: {
         type: 'object',
+        description: 'Datos para crear/actualizar un medico. No enviar id_medico porque se autogenera en la base de datos.',
         required: ['id_usuario', 'id_especialidad', 'matricula', 'valor_consulta'],
         properties: {
-          id_usuario: { type: 'integer', example: 3 },
-          id_especialidad: { type: 'integer', example: 3 },
-          matricula: { type: 'integer', example: 3000 },
-          descripcion: { type: 'string', nullable: true, example: 'test' },
-          valor_consulta: { type: 'number', format: 'float', example: 10000.00 }
+          id_usuario: {
+            type: 'integer',
+            minimum: 1,
+            description: 'ID del usuario que sera medico',
+            example: 3
+          },
+          id_especialidad: {
+            type: 'integer',
+            minimum: 1,
+            description: 'ID de la especialidad del medico',
+            example: 3
+          },
+          matricula: {
+            type: 'integer',
+            minimum: 1,
+            description: 'Numero de matricula profesional',
+            example: 3000
+          },
+          descripcion: {
+            type: 'string',
+            nullable: true,
+            maxLength: 255,
+            description: 'Descripcion breve del perfil del medico (opcional)',
+            example: 'Especialista en traumatologia deportiva'
+          },
+          valor_consulta: {
+            type: 'number',
+            format: 'float',
+            minimum: 0.01,
+            description: 'Valor de la consulta en moneda local',
+            example: 10000.00
+          }
+        },
+        example: {
+          id_usuario: 3,
+          id_especialidad: 3,
+          matricula: 3000,
+          descripcion: 'Especialista en traumatologia deportiva',
+          valor_consulta: 10000.00
         }
       },
       Paciente: {
@@ -79,8 +127,22 @@ const swaggerDefinition = {
         type: 'object',
         required: ['id_usuario', 'id_obra_social'],
         properties: {
-          id_usuario: { type: 'integer', example: 5 },
-          id_obra_social: { type: 'integer', example: 1 }
+          id_usuario: {
+            type: 'integer',
+            minimum: 1,
+            description: 'ID del usuario que sera paciente',
+            example: 5
+          },
+          id_obra_social: {
+            type: 'integer',
+            minimum: 1,
+            description: 'ID de la obra social asociada al paciente',
+            example: 1
+          }
+        },
+        example: {
+          id_usuario: 5,
+          id_obra_social: 1
         }
       },
       Usuario: {
@@ -100,13 +162,60 @@ const swaggerDefinition = {
         type: 'object',
         required: ['documento', 'apellido', 'nombres', 'email', 'contrasenia'],
         properties: {
-          documento: { type: 'string', maxLength: 20, example: '31000111' },
-          apellido: { type: 'string', maxLength: 100, example: 'Lopez' },
-          nombres: { type: 'string', maxLength: 100, example: 'Marcelo' },
-          email: { type: 'string', maxLength: 255, example: 'lopmar@correo.com' },
-          contrasenia: { type: 'string', minLength: 6, maxLength: 255, example: 'claveSegura123' },
-          foto_path: { type: 'string', nullable: true, example: '' },
-          rol: { type: 'integer', nullable: true, example: 2 }
+          documento: {
+            type: 'string',
+            maxLength: 20,
+            description: 'Documento de identidad del usuario',
+            example: '31000111'
+          },
+          apellido: {
+            type: 'string',
+            maxLength: 100,
+            description: 'Apellido del usuario',
+            example: 'Lopez'
+          },
+          nombres: {
+            type: 'string',
+            maxLength: 100,
+            description: 'Nombres del usuario',
+            example: 'Marcelo'
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            maxLength: 255,
+            description: 'Email unico del usuario',
+            example: 'nuevo.usuario@correo.com'
+          },
+          contrasenia: {
+            type: 'string',
+            minLength: 6,
+            maxLength: 255,
+            description: 'Contrasenia de acceso (minimo 6 caracteres)',
+            example: 'claveSegura123'
+          },
+          foto_path: {
+            type: 'string',
+            nullable: true,
+            description: 'Ruta o URL de la foto de perfil (opcional)',
+            example: ''
+          },
+          rol: {
+            type: 'integer',
+            nullable: true,
+            enum: [1, 2],
+            description: 'Rol del usuario: 1 administrador, 2 usuario comun',
+            example: 2
+          }
+        },
+        example: {
+          documento: '41000111',
+          apellido: 'Perez',
+          nombres: 'Ana',
+          email: 'ana.perez@correo.com',
+          contrasenia: 'claveSegura123',
+          foto_path: '',
+          rol: 2
         }
       },
       ObraSocial: {
@@ -124,10 +233,40 @@ const swaggerDefinition = {
         type: 'object',
         required: ['nombre', 'descripcion', 'porcentaje_descuento'],
         properties: {
-          nombre: { type: 'string', maxLength: 120, example: 'Jerarquicos' },
-          descripcion: { type: 'string', maxLength: 255, example: 'jer' },
-          porcentaje_descuento: { type: 'number', format: 'float', example: 10.00 },
-          es_particular: { type: 'integer', minimum: 0, maximum: 1, nullable: true, example: 0 }
+          nombre: {
+            type: 'string',
+            maxLength: 120,
+            description: 'Nombre de la obra social',
+            example: 'Jerarquicos'
+          },
+          descripcion: {
+            type: 'string',
+            maxLength: 255,
+            description: 'Descripcion breve de cobertura',
+            example: 'Cobertura general para consultas y practicas'
+          },
+          porcentaje_descuento: {
+            type: 'number',
+            format: 'float',
+            minimum: 0,
+            maximum: 100,
+            description: 'Porcentaje de descuento aplicado',
+            example: 10.00
+          },
+          es_particular: {
+            type: 'integer',
+            minimum: 0,
+            maximum: 1,
+            nullable: true,
+            description: '0 si es obra social, 1 si es atencion particular',
+            example: 0
+          }
+        },
+        example: {
+          nombre: 'Jerarquicos',
+          descripcion: 'Cobertura general para consultas y practicas',
+          porcentaje_descuento: 10.00,
+          es_particular: 0
         }
       },
       ValidationErrorItem: {

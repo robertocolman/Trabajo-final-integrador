@@ -20,6 +20,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 if (NODE_ENV === 'development') {
@@ -48,16 +49,7 @@ app.use(
     swaggerUi.setup(swaggerSpec, {
         swaggerOptions: {
             defaultModelRendering: 'model'
-        },
-        customCss: `
-            .swagger-ui .model-example,
-            .swagger-ui .response-col_description .renderedMarkdown,
-            .swagger-ui .examples-select,
-            .swagger-ui .opblock-section-request-body .tab li:first-child,
-            .swagger-ui .responses-inner .tab li:first-child {
-                display: none !important;
-            }
-        `
+        }
     })
 );
 
@@ -67,6 +59,17 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
+
+    if (err?.code === 'ER_DUP_ENTRY') {
+        const match = err?.sqlMessage?.match(/for key '([^']+)'/);
+        const keyName = match?.[1] || 'campo unico';
+        return errorResponse(res, `Registro duplicado en ${keyName}`, 409);
+    }
+
+    if (err?.code === 'ER_NO_REFERENCED_ROW_2') {
+        return errorResponse(res, 'Referencia invalida en datos relacionados', 400);
+    }
+
     errorResponse(res, 'Error interno del servidor', 500);
 });
 

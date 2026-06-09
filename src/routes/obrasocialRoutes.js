@@ -56,6 +56,9 @@ router.get('/:id', validarIdObra, obraController.getObraById);
  *     requestBody:
  *       required: true
  *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/ObraSocialInput'
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/ObraSocialInput'

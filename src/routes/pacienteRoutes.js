@@ -75,6 +75,9 @@ router.get('/:id', validarIdPaciente, pacienteController.getPacienteById);
  *     requestBody:
  *       required: true
  *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/PacienteInput'
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/PacienteInput'

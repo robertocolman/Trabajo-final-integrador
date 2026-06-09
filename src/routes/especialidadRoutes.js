@@ -56,6 +56,9 @@ router.get('/:id', validarIdEspecialidad, especialidadController.getEspecialidad
  *     requestBody:
  *       required: true
  *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/EspecialidadInput'
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/EspecialidadInput'
