@@ -22,6 +22,12 @@ const validarMedico = [
         .optional()
         .isString().withMessage('La matrícula debe ser texto')
         .isLength({ max: 50 }).withMessage('La matrícula excede 50 caracteres'),
+    check('id_especialidad')
+        .exists().withMessage('La especialidad es obligatoria')
+        .isInt({ gt: 0 }).withMessage('El ID de especialidad debe ser un entero positivo'),
+    check('id_usuario')
+        .exists().withMessage('El ID de usuario asociado es obligatorio')
+        .isInt({ gt: 0 }).withMessage('El ID de usuario debe ser un entero positivo'),
     validarResultados
 ];
 

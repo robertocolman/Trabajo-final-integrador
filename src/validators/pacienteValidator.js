@@ -24,7 +24,13 @@ const validarPaciente = [
         .isLength({ max: 20 }).withMessage('El DNI excede 20 caracteres'),
     check('fecha_nacimiento')
         .optional()
-        .isISO8601().withMessage('La fecha de nacimiento debe tener formato ISO8601'),
+        .isISO8601().withMessage('La fecha de nacimiento debe tener formato ISO8601 (YYYY-MM-DD)'),
+    check('id_obra_social')
+        .optional({ nullable: true })
+        .isInt({ gt: 0 }).withMessage('El ID de la obra social debe ser un entero positivo'),
+    check('id_usuario')
+        .exists().withMessage('El ID de usuario asociado es obligatorio')
+        .isInt({ gt: 0 }).withMessage('El ID de usuario debe ser un entero positivo'),
     validarResultados
 ];
 
