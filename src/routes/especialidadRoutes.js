@@ -1,5 +1,5 @@
 import express from 'express';
-// Importamos haciendo destructuring exacto con los nombres que me pasaste del controlador
+
 import { 
     getAllEspecialidades, 
     getEspecialidadById, 
@@ -8,7 +8,7 @@ import {
     deleteEspecialidad 
 } from '../controllers/especialidadController.js';
 
-// Importamos tus validadores
+// Importamos los validadores
 import { validarEspecialidad, validarIdEspecialidad } from '../validators/especialidadValidator.js';
 
 const router = express.Router();

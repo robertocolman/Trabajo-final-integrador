@@ -4,7 +4,7 @@ import { validarObra, validarIdObra } from '../validators/obrasocialValidator.js
 
 const router = express.Router();
 
-// Busca dinámicamente cualquier variante posible de nombre que usaron tus compañeros
+// Busca dinámicamente cualquier variante de los métodos en el controlador para cada operación CRUD
 const getMethod = obraSocialController.getObrasSociales || obraSocialController.getAllObrasSociales || obraSocialController.getAll || obraSocialController.listar || Object.values(obraSocialController).find(f => f.name?.toLowerCase().includes('getall') || f.name?.toLowerCase().includes('getobra'));
 const getByIdMethod = obraSocialController.getObraSocialById || obraSocialController.getObraSocialByPk || obraSocialController.getById || obraSocialController.getByIdObraSocial || Object.values(obraSocialController).find(f => f.name?.toLowerCase().includes('byid'));
 const createMethod = obraSocialController.createObraSocial || obraSocialController.create || obraSocialController.store || Object.values(obraSocialController).find(f => f.name?.toLowerCase().includes('create'));

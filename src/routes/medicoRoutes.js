@@ -1,12 +1,10 @@
 import express from 'express';
 import * as medicoController from '../controllers/medicoController.js';
-// Importamos tus validadores limpios de la carpeta validators
+
 import { validarMedico, validarIdMedico } from '../validators/medicoValidator.js';
 
 const router = express.Router();
 
-// Borramos las funciones locales "validarResultados", "validarMedico" y "validarIdMedico" 
-// que estaban duplicadas acá para que tome las tuyas de la carpeta validators.
 
 /** @openapi
  * /medicos:
