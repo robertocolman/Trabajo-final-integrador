@@ -1,4 +1,4 @@
-# Clínica Médica - Backend (Trabajo Final Integrador)
+# Clínica Médica 
 
 - Requisitos de funcionamiento:
   - Node >= 16
@@ -16,8 +16,25 @@ cp .env.example .env   # completar variables de entorno
   - Se usa `morgan` para registrar solicitudes.
   - Logs de acceso se guardan en `logs/access.log`.
 
+
+
 - Documentación API (Swagger):
   - Disponible en `http://localhost:3000/api-docs` cuando el servidor corre.
+
+- Usuarios de prueba:
+
+
+Medico:
+  "email": "benhor@correo.com",
+  "contrasenia": "benhor"
+Admin:
+  "email": "ferben@correo.com",
+  "contrasenia": "ferben"
+Paciente
+  "email": "lopjac@correo.com",
+  "contrasenia": "lopjac"
+
+
 
 - Soft Delete (implementación):
   - Se aplica borrado lógico sin eliminar físicamente registros.
