@@ -22,10 +22,34 @@ const especialidadModel = {
     },
 
     create: async (nombre) => {
-        const query = 'INSERT INTO especialidades (nombre, activo) VALUES (?, 1)';
+        const normalizedNombre = nombre.toUpperCase();
+        const findExistingQuery = `
+            SELECT id_especialidad, activo
+            FROM especialidades
+            WHERE UPPER(nombre) = UPPER(?)
+            LIMIT 1
+        `;
+        const insertQuery = 'INSERT INTO especialidades (nombre, activo) VALUES (?, 1)';
+        const reactivateQuery = 'UPDATE especialidades SET nombre = ?, activo = 1 WHERE id_especialidad = ?';
+
         try {
-            const [result] = await pool.query(query, [nombre.toUpperCase()]);
-            return result.insertId;
+            const [existingRows] = await pool.query(findExistingQuery, [normalizedNombre]);
+            const existing = existingRows[0];
+
+            if (existing?.activo === 1) {
+                const duplicateError = new Error('Registro duplicado en nombre');
+                duplicateError.code = 'ER_DUP_ENTRY';
+                duplicateError.sqlMessage = "Duplicate entry for key 'nombre'";
+                throw duplicateError;
+            }
+
+            if (existing?.activo === 0) {
+                await pool.query(reactivateQuery, [normalizedNombre, existing.id_especialidad]);
+                return { id: existing.id_especialidad, reactivated: true };
+            }
+
+            const [result] = await pool.query(insertQuery, [normalizedNombre]);
+            return { id: result.insertId, reactivated: false };
         } catch (error) {
             throw error;
         }

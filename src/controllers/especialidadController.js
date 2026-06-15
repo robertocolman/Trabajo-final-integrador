@@ -25,6 +25,9 @@ export const createEspecialidad = async (req, res, next) => {
     try {
         const { nombre } = req.body;
         const created = await especialidadService.create(nombre);
+        if (created.reactivada) {
+            created.message = 'Especialidad reactivada correctamente';
+        }
         successResponse(res, created, 201);
     } catch (error) {
         next(error);

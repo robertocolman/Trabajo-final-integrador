@@ -10,8 +10,12 @@ const especialidadService = {
     },
 
     create: async (nombre) => {
-        const id = await especialidadModel.create(nombre);
-        return { id, nombre: nombre.toUpperCase() };
+        const result = await especialidadModel.create(nombre);
+        return {
+            id: result.id,
+            nombre: nombre.toUpperCase(),
+            reactivada: result.reactivated
+        };
     },
 
     update: async (id, nombre) => {
