@@ -54,6 +54,15 @@ const usuarioModel = {
             throw error;
         }
     }
+    ,
+     getByEmail: async (email) => {
+        const query = `
+        SELECT id_usuario, documento, apellido, nombres, email, contrasenia, foto_path, rol, activo
+        FROM usuarios WHERE email = ? AND activo = 1
+        `;
+    const [rows] = await pool.query(query, [email]);
+    return rows[0] || null;
+    }
 };
 
 export default usuarioModel;

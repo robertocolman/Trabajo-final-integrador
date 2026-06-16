@@ -8,6 +8,7 @@ import medicoRoutes from './src/routes/medicoRoutes.js';
 import pacienteRoutes from './src/routes/pacienteRoutes.js';
 import usuarioRoutes from './src/routes/usuarioRoutes.js';
 import obraSocialRoutes from './src/routes/obrasocialRoutes.js';
+import turnoRoutes from './src/routes/turnoRoutes.js';
 import { morganOptions, morganFormat } from './src/config/logger.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './src/config/swagger.js';
@@ -41,6 +42,7 @@ app.use('/api/v1/medicos', medicoRoutes);
 app.use('/api/v1/pacientes', pacienteRoutes);
 app.use('/api/v1/usuarios', usuarioRoutes);
 app.use('/api/v1/obras_sociales', obraSocialRoutes);
+app.use('/api/v1/turnos', turnoRoutes);
 
 // Documentación Swagger
 app.use(
