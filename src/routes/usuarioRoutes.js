@@ -1,4 +1,6 @@
 import express from 'express';
+import { authenticateToken } from '../middleware/authMiddleware.js';
+import { authorizeRole } from '../middleware/roleMiddleware.js';
 import * as usuarioController from '../controllers/usuarioController.js';
 import { validarUsuario, validarIdUsuario } from '../validators/usuarioValidator.js';
 
@@ -26,123 +28,15 @@ const deleteMethod = usuarioController.deleteUsuario || usuarioController.delete
  * 500:
  * $ref: '#/components/responses/InternalError'
  */
-router.get('/', getMethod);
+router.get('/', authenticateToken, authorizeRole(['admin']), getMethod);
 
-/**
- * @openapi
- * /usuarios/{id}:
- * get:
- * tags: [Usuarios]
- * summary: Obtener un usuario por su ID
- * parameters:
- * - name: id
- * in: path
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: Detalle del usuario
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseItemUsuario'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 404:
- * $ref: '#/components/responses/NotFound'
- * 500:
- * $ref: '#/components/responses/InternalError'
- */
-router.get('/:id', validarIdUsuario, getByIdMethod);
+router.get('/:id', authenticateToken, authorizeRole(['admin']), validarIdUsuario, getByIdMethod);
 
-/**
- * @openapi
- * /usuarios:
- * post:
- * tags: [Usuarios]
- * summary: Crear un nuevo usuario
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/UsuarioInput'
- * responses:
- * 201:
- * description: Usuario creado exitosamente
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseItemUsuario'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 500:
- * $ref: '#/components/responses/InternalError'
- */
 router.post('/', validarUsuario, createMethod);
 
-/**
- * @openapi
- * /usuarios/{id}:
- * put:
- * tags: [Usuarios]
- * summary: Actualizar un usuario por su ID
- * parameters:
- * - name: id
- * in: path
- * required: true
- * schema:
- * type: integer
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/UsuarioInput'
- * responses:
- * 200:
- * description: Usuario actualizado
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseItemUsuario'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 404:
- * $ref: '#/components/responses/NotFound'
- * 500:
- * $ref: '#/components/responses/InternalError'
- */
-router.put('/:id', validarIdUsuario, validarUsuario, updateMethod);
+router.put('/:id', authenticateToken, authorizeRole(['admin']), validarIdUsuario, validarUsuario, updateMethod);
 
-/**
- * @openapi
- * /usuarios/{id}:
- * delete:
- * tags: [Usuarios]
- * summary: Eliminar un usuario (soft delete)
- * parameters:
- * - name: id
- * in: path
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: Usuario eliminado correctamente
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseMessage'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 404:
- * $ref: '#/components/responses/NotFound'
- * 500:
- * $ref: '#/components/responses/InternalError'
- */
-router.delete('/:id', validarIdUsuario, deleteMethod);
+router.delete('/:id', authenticateToken, authorizeRole(['admin']), validarIdUsuario, deleteMethod);
 
 router.post('/login', usuarioController.login);
 
