@@ -51,6 +51,9 @@ const validarIdUsuario = [
     param('id')
         .exists().withMessage('El ID es obligatorio')
         .isInt({ gt: 0 }).withMessage('El ID debe ser entero positivo'),
+            check('id_obra_social')
+        .exists().withMessage('El ID de obra social es obligatorio')
+        .isInt({ gt: 0 }).withMessage('El ID de obra social debe ser un entero positivo'),
     validarResultados
 ];
 

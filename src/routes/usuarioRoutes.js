@@ -144,4 +144,6 @@ router.put('/:id', validarIdUsuario, validarUsuario, updateMethod);
  */
 router.delete('/:id', validarIdUsuario, deleteMethod);
 
+router.post('/login', usuarioController.login);
+
 export default router;

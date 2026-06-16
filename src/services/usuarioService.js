@@ -22,6 +22,14 @@ const usuarioService = {
     remove: async (id) => {
         return await usuarioModel.softDelete(id);
     }
+    ,
+    login: async ({ email, contrasenia }) => {
+       const usuario = await usuarioModel.getByEmail(email);
+       if (!usuario) throw new Error('Credenciales inválidas');
+       if (usuario.contrasenia !== contrasenia) throw new Error('Credenciales inválidas');
+       const { contrasenia: _, ...usuarioSinPass } = usuario;
+       return usuarioSinPass;
+    }
 };
 
 export default usuarioService;

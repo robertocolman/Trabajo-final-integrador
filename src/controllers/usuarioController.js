@@ -53,3 +53,19 @@ export const deleteUsuario = async (req, res, next) => {
         next(error);
     }
 };
+
+export const login = async (req, res, next) => {
+    try {
+        const { email, contrasenia } = req.body;
+        if (!email || !contrasenia) {
+            return errorResponse(res, 'Email y contraseña son obligatorios', 400);
+        }
+        const usuario = await usuarioService.login({ email, contrasenia });
+        successResponse(res, usuario);
+    } catch (error) {
+        if (error.message === 'Credenciales inválidas') {
+            return errorResponse(res, 'Credenciales inválidas', 401);
+        }
+        next(error);
+    }
+};
