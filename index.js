@@ -3,6 +3,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import { errorResponse } from './src/utils/responseHandler.js';
+import { errorHandler } from './src/middleware/errorHandler.js';
 import especialidadRoutes from './src/routes/especialidadRoutes.js';
 import medicoRoutes from './src/routes/medicoRoutes.js';
 import pacienteRoutes from './src/routes/pacienteRoutes.js';
@@ -59,21 +60,7 @@ app.use((req, res) => {
     errorResponse(res, 'Ruta no encontrada', 404);
 });
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-
-    if (err?.code === 'ER_DUP_ENTRY') {
-        const match = err?.sqlMessage?.match(/for key '([^']+)'/);
-        const keyName = match?.[1] || 'campo unico';
-        return errorResponse(res, `Registro duplicado en ${keyName}`, 409);
-    }
-
-    if (err?.code === 'ER_NO_REFERENCED_ROW_2') {
-        return errorResponse(res, 'Referencia invalida en datos relacionados', 400);
-    }
-
-    errorResponse(res, 'Error interno del servidor', 500);
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
