@@ -53,6 +53,25 @@ const medicoModel = {
         }
     },
 
+    getByEspecialidad: async (id_especialidad) => {
+        const query = `
+            SELECT
+                m.id_medico, m.id_usuario, m.id_especialidad, m.matricula, m.descripcion, m.valor_consulta,
+                u.apellido, u.nombres, u.email,
+                e.nombre AS especialidad
+            FROM medicos m
+            INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+            INNER JOIN especialidades e ON e.id_especialidad = m.id_especialidad
+            WHERE m.id_especialidad = ? AND u.activo = 1 AND e.activo = 1
+        `;
+        try {
+            const [rows] = await pool.query(query, [id_especialidad]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     create: async ({ id_usuario, id_especialidad, matricula, descripcion, valor_consulta }) => {
         const query = `INSERT INTO medicos (id_usuario, id_especialidad, matricula, descripcion, valor_consulta) VALUES (?, ?, ?, ?, ?)`;
         try {

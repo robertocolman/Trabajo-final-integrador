@@ -1,6 +1,6 @@
 import pool from '../config/db.js';
+
 const especialidadModel = {
-    
     getAll: async () => {
         const query = 'SELECT * FROM especialidades WHERE activo = 1';
         try {
@@ -63,8 +63,8 @@ const especialidadModel = {
         } catch (error) {
             throw error;
         }
-    }
-    ,
+    },
+
     softDelete: async (id) => {
         const query = 'UPDATE especialidades SET activo = 0 WHERE id_especialidad = ? AND activo = 1';
         try {
