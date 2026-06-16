@@ -7,14 +7,16 @@ API REST para gestion de clinica medica con Express + MySQL.
 
 - Materia: Programacion III
 - Carrera: Tecnicatura Universitaria en Desarrollo Web
-- Grupo: COMPLETAR
-- Integrantes: COMPLETAR
-- Repositorio: COMPLETAR URL
+- Grupo: Grupo W
+- Integrantes: 
+## Roberto Esteban Chávez 
+## Roberto Albano Colman 
+## Raúl Fabricio Fabian Galindez
+## Nicolas Montenegro
+## Leandro Plaza Puga
+## Nahuel Valenzuela
+
 - Video de exposicion: COMPLETAR URL
-
-## Objetivo del proyecto
-
-Implementar un backend REST para la gestion de usuarios, medicos, pacientes, especialidades y obras sociales, siguiendo buenas practicas de validacion, manejo de errores, documentacion API y borrado logico (soft delete).
 
 ## Stack tecnologico
 
