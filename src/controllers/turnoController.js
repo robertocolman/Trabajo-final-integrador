@@ -47,7 +47,6 @@ export const createTurno = async (req, res, next) => {
         const created = await turnoService.create(data);
         successResponse(res, created, 201);
     } catch (error) {
-        // Errores de negocio (médico no encontrado, fecha pasada, etc.)
         if (error.message && !error.code) {
             return errorResponse(res, error.message, 400);
         }
