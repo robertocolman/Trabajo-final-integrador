@@ -55,7 +55,7 @@ const usuarioModel = {
         }
     }
     ,
-     getByEmail: async (email) => {
+    getByEmail: async (email) => {
         const query = `
         SELECT id_usuario, documento, apellido, nombres, email, contrasenia, foto_path, rol, activo
         FROM usuarios WHERE email = ? AND activo = 1
