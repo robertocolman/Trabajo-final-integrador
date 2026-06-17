@@ -16,7 +16,7 @@ API REST para gestion de clinica medica con Express + MySQL.
 ## Leandro Plaza Puga
 ## Nahuel Valenzuela
 
-- Video de exposicion: COMPLETAR URL
+- Video de exposicion: [](https://drive.google.com/drive/folders/12Nll-StpO11Ff5fxMZ2uMScFYF2t_Rg2)
 
 ## Stack tecnologico
 
