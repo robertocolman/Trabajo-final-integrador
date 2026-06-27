@@ -52,17 +52,43 @@ app.use('/api/v1/turnos', turnoRoutes);
 
 // REPORTES PDF
 app.use('/api/reportes', reporteRoutes);
+app.use('/api/v1/reportes', reporteRoutes);
 
 // Swagger
 app.use(
     '/api-docs',
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, {
+                customJs: '/swagger-custom.js',
         swaggerOptions: {
             defaultModelRendering: 'model'
         }
     })
 );
+
+app.get('/swagger-custom.js', (req, res) => {
+        res.type('application/javascript');
+        res.send(`
+(() => {
+    const replaceDownloadLabel = () => {
+        const elements = document.querySelectorAll('button, a');
+        elements.forEach((el) => {
+            if (el.textContent && el.textContent.trim() === 'Download file') {
+                el.textContent = 'Descargar reporte';
+            }
+        });
+    };
+
+    replaceDownloadLabel();
+
+    const observer = new MutationObserver(() => {
+        replaceDownloadLabel();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
+`);
+});
 
 app.use((req, res) => {
     errorResponse(res, 'Ruta no encontrada', 404);

@@ -13,134 +13,134 @@ const deleteMethod = pacienteController.deletePaciente || pacienteController.del
 /**
  * @openapi
  * /pacientes:
- * get:
- * tags: [Pacientes]
- * summary: Listar pacientes activos
- * responses:
- * 200:
- * description: Lista de pacientes activos
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseListPaciente'
- * 500:
- * $ref: '#/components/responses/InternalError'
+ *   get:
+ *     tags: [Pacientes]
+ *     summary: Listar pacientes activos
+ *     responses:
+ *       200:
+ *         description: Lista de pacientes activos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseListPaciente'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.get('/', getMethod);
 
 /**
  * @openapi
  * /pacientes/{id}:
- * get:
- * tags: [Pacientes]
- * summary: Obtener un paciente por su ID
- * parameters:
- * - name: id
- * in: path
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: Detalle del paciente
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseItemPaciente'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 404:
- * $ref: '#/components/responses/NotFound'
- * 500:
- * $ref: '#/components/responses/InternalError'
+ *   get:
+ *     tags: [Pacientes]
+ *     summary: Obtener un paciente por su ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Detalle del paciente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseItemPaciente'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.get('/:id', validarIdPaciente, getByIdMethod);
 
 /**
  * @openapi
  * /pacientes:
- * post:
- * tags: [Pacientes]
- * summary: Crear un nuevo paciente
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/PacienteInput'
- * responses:
- * 201:
- * description: Paciente creado exitosamente
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseItemPaciente'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 500:
- * $ref: '#/components/responses/InternalError'
+ *   post:
+ *     tags: [Pacientes]
+ *     summary: Crear un nuevo paciente
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PacienteInput'
+ *     responses:
+ *       201:
+ *         description: Paciente creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseItemPaciente'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.post('/', validarPaciente, createMethod);
 
 /**
  * @openapi
  * /pacientes/{id}:
- * put:
- * tags: [Pacientes]
- * summary: Actualizar un paciente por su ID
- * parameters:
- * - name: id
- * in: path
- * required: true
- * schema:
- * type: integer
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/PacienteInput'
- * responses:
- * 200:
- * description: Paciente actualizado
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseItemPaciente'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 404:
- * $ref: '#/components/responses/NotFound'
- * 500:
- * $ref: '#/components/responses/InternalError'
+ *   put:
+ *     tags: [Pacientes]
+ *     summary: Actualizar un paciente por su ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PacienteInput'
+ *     responses:
+ *       200:
+ *         description: Paciente actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseItemPaciente'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.put('/:id', validarIdPaciente, validarPaciente, updateMethod);
 
 /**
  * @openapi
  * /pacientes/{id}:
- * delete:
- * tags: [Pacientes]
- * summary: Eliminar un paciente (soft delete)
- * parameters:
- * - name: id
- * in: path
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: Paciente eliminado correctamente
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseMessage'
- * 400:
- * $ref: '#/components/responses/ValidationError'
- * 404:
- * $ref: '#/components/responses/NotFound'
- * 500:
- * $ref: '#/components/responses/InternalError'
+ *   delete:
+ *     tags: [Pacientes]
+ *     summary: Eliminar un paciente (soft delete)
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Paciente eliminado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseMessage'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.delete('/:id', validarIdPaciente, deleteMethod);
 

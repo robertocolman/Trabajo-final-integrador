@@ -15,18 +15,18 @@ const deleteMethod = usuarioController.deleteUsuario || usuarioController.delete
 /**
  * @openapi
  * /usuarios:
- * get:
- * tags: [Usuarios]
- * summary: Listar usuarios activos
- * responses:
- * 200:
- * description: Lista de usuarios activos
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/SuccessResponseListUsuario'
- * 500:
- * $ref: '#/components/responses/InternalError'
+ *   get:
+ *     tags: [Usuarios]
+ *     summary: Listar usuarios activos
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios activos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponseListUsuario'
+ *       500:
+ *         $ref: '#/components/responses/InternalError'
  */
 router.get('/', authenticateToken, authorizeRole(['admin']), getMethod);
 

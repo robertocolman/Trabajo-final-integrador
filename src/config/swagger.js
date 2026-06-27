@@ -18,7 +18,8 @@ const swaggerDefinition = {
     { name: 'Medicos', description: 'Gestión de médicos' },
     { name: 'Pacientes', description: 'Gestión de pacientes' },
     { name: 'Usuarios', description: 'Gestión de usuarios del sistema' },
-    { name: 'ObrasSociales', description: 'Gestión de obras sociales' }
+    { name: 'ObrasSociales', description: 'Gestión de obras sociales' },
+    { name: 'Reportes', description: 'Descarga de reportes en PDF' }
   ],
   components: {
     schemas: {
