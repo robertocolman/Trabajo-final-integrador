@@ -23,17 +23,14 @@ const especialidadModel = {
 
     create: async (nombre) => {
         const normalizedNombre = nombre.toUpperCase();
-        const findExistingQuery = `
-            SELECT id_especialidad, activo
-            FROM especialidades
-            WHERE UPPER(nombre) = UPPER(?)
-            LIMIT 1
-        `;
-        const insertQuery = 'INSERT INTO especialidades (nombre, activo) VALUES (?, 1)';
-        const reactivateQuery = 'UPDATE especialidades SET nombre = ?, activo = 1 WHERE id_especialidad = ?';
-
+        const conn = await pool.getConnection();
         try {
-            const [existingRows] = await pool.query(findExistingQuery, [normalizedNombre]);
+            await conn.beginTransaction();
+
+            const [existingRows] = await conn.query(
+                `SELECT id_especialidad, activo FROM especialidades WHERE UPPER(nombre) = UPPER(?) LIMIT 1 FOR UPDATE`,
+                [normalizedNombre]
+            );
             const existing = existingRows[0];
 
             if (existing?.activo === 1) {
@@ -43,15 +40,22 @@ const especialidadModel = {
                 throw duplicateError;
             }
 
+            let resultado;
             if (existing?.activo === 0) {
-                await pool.query(reactivateQuery, [normalizedNombre, existing.id_especialidad]);
-                return { id: existing.id_especialidad, reactivated: true };
+                await conn.query('UPDATE especialidades SET nombre = ?, activo = 1 WHERE id_especialidad = ?', [normalizedNombre, existing.id_especialidad]);
+                resultado = { id: existing.id_especialidad, reactivated: true };
+            } else {
+                const [result] = await conn.query('INSERT INTO especialidades (nombre, activo) VALUES (?, 1)', [normalizedNombre]);
+                resultado = { id: result.insertId, reactivated: false };
             }
 
-            const [result] = await pool.query(insertQuery, [normalizedNombre]);
-            return { id: result.insertId, reactivated: false };
+            await conn.commit();
+            return resultado;
         } catch (error) {
+            await conn.rollback();
             throw error;
+        } finally {
+            conn.release();
         }
     },
 
