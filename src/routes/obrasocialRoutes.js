@@ -1,6 +1,8 @@
 import express from 'express';
 import * as obraSocialController from '../controllers/obrasocialController.js';
 import { validarObra, validarIdObra } from '../validators/obrasocialValidator.js';
+import { authenticateToken, verificarRol } from '../middleware/authMiddleware.js';
+
 
 const router = express.Router();
 
@@ -81,7 +83,7 @@ router.get('/:id', validarIdObra, getByIdMethod);
  * 500:
  * $ref: '#/components/responses/InternalError'
  */
-router.post('/', validarObra, createMethod);
+router.post('/', authenticateToken, verificarRol(['admin', 'secretaria']), validarObra, createMethod);
 
 /**
  * @openapi
@@ -115,7 +117,7 @@ router.post('/', validarObra, createMethod);
  * 500:
  * $ref: '#/components/responses/InternalError'
  */
-router.put('/:id', validarIdObra, validarObra, updateMethod);
+router.put('/:id', authenticateToken, verificarRol(['admin', 'secretaria']), validarIdObra, validarObra, updateMethod);
 
 /**
  * @openapi
@@ -143,6 +145,6 @@ router.put('/:id', validarIdObra, validarObra, updateMethod);
  * 500:
  * $ref: '#/components/responses/InternalError'
  */
-router.delete('/:id', validarIdObra, deleteMethod);
+router.delete('/:id', authenticateToken, verificarRol(['admin']), validarIdObra, deleteMethod);
 
 export default router;
