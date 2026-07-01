@@ -1,9 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { errorResponse } from '../utils/responseHandler.js';
 
-import jwt from 'jsonwebtoken';
-import { errorResponse } from '../utils/responseHandler.js';
-
 export const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -34,4 +31,3 @@ export const verificarRol = (rolesPermitidos) => {
         next();
     };
 };
-
