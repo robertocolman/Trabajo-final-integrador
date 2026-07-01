@@ -78,20 +78,61 @@ const turnoService = {
     },
 
     marcarAtendido: async (id) => {
-        const turno = await turnoModel.getById(id);
-        if (!turno) throw new Error('Turno no encontrado');
-        if (turno.atendido === 1) throw new Error('El turno ya fue marcado como atendido');
+        const conn = await pool.getConnection();
+        try {
+            await conn.beginTransaction();
 
-        const affected = await turnoModel.marcarAtendido(id);
-        return affected;
+            const [rows] = await conn.query(
+                'SELECT * FROM turnos_reservas WHERE id_turno_reserva = ? AND activo = 1 FOR UPDATE',
+                [id]
+            );
+            const turno = rows[0];
+
+            if (!turno) throw new Error('Turno no encontrado');
+            if (turno.atendido === 1) throw new Error('El turno ya fue marcado como atendido');
+
+            const [result] = await conn.query(
+                'UPDATE turnos_reservas SET atendido = 1 WHERE id_turno_reserva = ? AND activo = 1 AND atendido = 0',
+                [id]
+            );
+
+            await conn.commit();
+            return result.affectedRows;
+        } catch (error) {
+            await conn.rollback();
+            throw error;
+        } finally {
+            conn.release();
+        }
     },
 
     cancelar: async (id) => {
-        const turno = await turnoModel.getById(id);
-        if (!turno) throw new Error('Turno no encontrado');
-        if (turno.atendido === 1) throw new Error('No se puede cancelar un turno ya atendido');
+        const conn = await pool.getConnection();
+        try {
+            await conn.beginTransaction();
 
-        return await turnoModel.softDelete(id);
+            const [rows] = await conn.query(
+                'SELECT * FROM turnos_reservas WHERE id_turno_reserva = ? AND activo = 1 FOR UPDATE',
+                [id]
+            );
+            const turno = rows[0];
+
+            if (!turno) throw new Error('Turno no encontrado');
+            if (turno.atendido === 1) throw new Error('No se puede cancelar un turno ya atendido');
+
+            const [result] = await conn.query(
+                'UPDATE turnos_reservas SET activo = 0 WHERE id_turno_reserva = ? AND activo = 1',
+                [id]
+            );
+
+            await conn.commit();
+            return result.affectedRows;
+        } catch (error) {
+            await conn.rollback();
+            throw error;
+        } finally {
+            conn.release();
+        }
     }
 };
 
